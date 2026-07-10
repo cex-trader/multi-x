@@ -3,25 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>神奇的伸缩装置 - 课程播放列表</title>
+    <title>第00课：神奇的伸缩装置 - 播放列表</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
     <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
     <style>
-        body { background: #141414; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; }
-        .main-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; gap: 20px; }
-        .player-wrapper { flex: 3; background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .playlist-wrapper { flex: 1; background: #1f1f1f; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; max-height: 540px; overflow-y: auto; }
-        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #00adb5; }
-        .playlist-item { padding: 12px 10px; margin-bottom: 8px; background: #2a2a2a; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .playlist-item:hover { background: #3a3a3a; }
-        .playlist-item.active { background: #00adb5; color: #fff; font-weight: bold; }
-        h1 { font-size: 22px; margin-bottom: 20px; text-align: center; color: #eee; }
-        @media (max-width: 768px) { .main-container { flex-direction: column; } .playlist-wrapper { max-height: 300px; } }
+        body { 
+            background: #141414; 
+            color: #fff; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+        }
+        .main-container { 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            display: flex; 
+            flex-direction: row; 
+            gap: 20px; 
+        }
+        .player-wrapper { 
+            flex: 3; 
+            background: #000; 
+            border-radius: 8px; 
+            overflow: hidden; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5); 
+        }
+        .playlist-wrapper { 
+            flex: 1; 
+            background: #1f1f1f; 
+            border-radius: 8px; 
+            padding: 15px; 
+            display: flex; 
+            flex-direction: column; 
+            max-height: 540px; 
+            overflow-y: auto; 
+        }
+        h2 { 
+            margin-top: 0; 
+            font-size: 16px; 
+            border-bottom: 1px solid #333; 
+            padding-bottom: 10px; 
+            color: #00adb5; 
+        }
+        .playlist-item { 
+            padding: 12px 10px; 
+            margin-bottom: 8px; 
+            background: #2a2a2a; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            font-size: 13px; 
+            white-space: nowrap; 
+            overflow: hidden; 
+            text-overflow: ellipsis; 
+        }
+        .playlist-item:hover { 
+            background: #3a3a3a; 
+        }
+        .playlist-item.active { 
+            background: #00adb5; 
+            color: #fff; 
+            font-weight: bold; 
+        }
+        h1 { 
+            font-size: 22px; 
+            margin-bottom: 20px; 
+            text-align: center; 
+            color: #eee; 
+        }
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #00adb5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .nav-back:hover {
+            color: #00fff5;
+        }
+        @media (max-width: 768px) { 
+            .main-container { flex-direction: column; } 
+            .playlist-wrapper { max-height: 300px; } 
+        }
     </style>
 </head>
 <body>
 
-    <h1>🎬 《神奇的伸缩装置》 课程在线点播</h1>
+    <a href="index.html" class="nav-back">⬅ 返回课程首页</a>
+    <h1>🎬 第00课：神奇的伸缩装置</h1>
 
     <div class="main-container">
         <div class="player-wrapper">
@@ -29,4 +98,82 @@
         </div>
         
         <div class="playlist-wrapper">
-            <h2>课程选
+            <h2>课程选集 (自动连播)</h2>
+            <div id="playlist"></div>
+        </div>
+    </div>
+
+    <script>
+        // 从原始数据结构中完美过滤并解构出来的真实原厂 MP4 链路
+        const videoList = [
+            { name: "01. 课前预习", url: "https://online-education.codemao.cn/228/codecamp/0b2ca4e511c84beb8dbdae9084ece926.mp4" },
+            { name: "02. 我有个问题", url: "https://online-education.codemao.cn/228/codecamp/61c02b64d1bd44a6a32fe83a2a77ae87.mp4" },
+            { name: "03. 我可以创造 (环节一)", url: "https://online-education.codemao.cn/228/codecamp/7fcd50f139f04892813a6c51c146e2db.mp4" },
+            { name: "04. 我可以创造 (环节二)", url: "https://online-education.codemao.cn/228/codecamp/16f414aee31a4b9eb6168082ba988b0a.mp4" },
+            { name: "05. 我可以创造 (互动演示)", url: "https://online-education.codemao.cn/228/codecamp/4804d88234a44fd4819553210633d36a.mp4" },
+            { name: "06. 我可以创造 (环节三)", url: "https://online-education.codemao.cn/228/codecamp/95a09b240336415f93f9c97ba2ac971b.mp4" },
+            { name: "07. 我有新发现 (环节一)", url: "https://online-education.codemao.cn/228/codecamp/3378755071884c18a3ba1365f38742ea.mp4" },
+            { name: "08. 我有新发现 (互动演示)", url: "https://online-education.codemao.cn/228/codecamp/7a46e350de9145f0bcd3fe4331288de1.mp4" },
+            { name: "09. 我有新发现 (环节二)", url: "https://online-education.codemao.cn/228/codecamp/09c4a84e8f4c41ebaeaab1e0b1243824.mp4" },
+            { name: "10. 我的小总结", url: "https://online-education.codemao.cn/228/codecamp/4d780e928e51482fbdfe763278ceafa1.mp4" },
+            { name: "11. 总结回顾 (环节一)", url: "https://online-education.codemao.cn/228/codecamp/bf6a30e8f4ec4938a5a9c9cad8dfcf4f.mp4" },
+            { name: "12. 总结回顾 (环节二)", url: "https://online-education.codemao.cn/228/codecamp/f45a26ddab1f4651801485c59b755fa8.mp4" },
+            { name: "13. 拓展练习 (引入)", url: "https://online-education.codemao.cn/228/codecamp/d49a26b58c9e4085b4c61e8d294d9e62.mp4" },
+            { name: "14. 拓展练习 (分支判定)", url: "https://online-education.codemao.cn/228/codecamp/30641f3819854f92a5b03a543ef22d82.mp4" },
+            { name: "15. 拓展练习 (讲解)", url: "https://online-education.codemao.cn/228/codecamp/7585e92a339b4a438dedb3cfbaee9fcb.mp4" }
+        ];
+
+        let currentIndex = 0;
+
+        // 初始化播放器
+        const dp = new DPlayer({
+            container: document.getElementById('dplayer'),
+            video: {
+                url: videoList[currentIndex].url,
+                type: 'normal'
+            },
+            autoplay: false,
+            hotkey: true,
+            screenshot: false
+        });
+
+        // 渲染列表
+        const playlistContainer = document.getElementById('playlist');
+        videoList.forEach((video, index) => {
+            const item = document.createElement('div');
+            item.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
+            item.innerText = video.name;
+            item.title = video.name;
+            
+            item.addEventListener('click', () => {
+                switchVideo(index);
+            });
+            playlistContainer.appendChild(item);
+        });
+
+        // 切集逻辑
+        function switchVideo(index) {
+            currentIndex = index;
+            
+            const items = document.querySelectorAll('.playlist-item');
+            items.forEach((item, i) => {
+                if (i === index) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+
+            dp.switchVideo({
+                url: videoList[index].url,
+                type: 'normal'
+            });
+            dp.play();
+        }
+
+        // 核心功能：监听播放结束，自动无缝加载并连播下一集
+        dp.on('ended', () => {
+            if (currentIndex < videoList.length - 1) {
+                switchVideo(currentIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>
