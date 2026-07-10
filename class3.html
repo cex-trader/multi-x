@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>趣味跳舞小人 - 课程播放列表</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+    <style>
+        body { background: #141414; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 20px; }
+        .main-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: row; gap: 20px; }
+        .player-wrapper { flex: 3; background: #000; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+        .playlist-wrapper { flex: 1; background: #1f1f1f; border-radius: 8px; padding: 15px; display: flex; flex-direction: column; max-height: 520px; overflow-y: auto; }
+        h2 { margin-top: 0; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 10px; color: #e50914; }
+        .playlist-item { padding: 12px 10px; margin-bottom: 8px; background: #2a2a2a; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .playlist-item:hover { background: #3a3a3a; }
+        .playlist-item.active { background: #e50914; color: #fff; font-weight: bold; }
+        h1 { font-size: 22px; margin-bottom: 20px; text-align: center; }
+        @media (max-width: 768px) { .main-container { flex-direction: column; } .playlist-wrapper { max-height: 300px; } }
+    </style>
+</head>
+<body>
+
+    <h1>🎬 《趣味跳舞小人》 课程在线点播</h1>
+
+    <div class="main-container">
+        <div class="player-wrapper">
+            <div id="dplayer"></div>
+        </div>
+        
+        <div class="playlist-wrapper">
+            <h2>课程选集</h2>
+            <div id="playlist"></div>
+        </div>
+    </div>
+
+    <script>
+        // 从 JSON 中精准提取并整理的 13 个 MP4 视频片段数据源
+        const videoList = [
+            { name: "01. 课前预习", url: "https://online-education.codemao.cn/228/codecamp/90be4ee2754b4cab93bd34509c18a067.mp4" },
+            { name: "02. 我有个问题", url: "https://online-education.codemao.cn/228/codecamp/5cbc59de76c34f408de57ec20a8447b7.mp4" },
+            { name: "03. 我可以创造 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/0c623f70f6d44747a5171fe92102f84b.mp4" },
+            { name: "04. 我可以创造 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/69ef2362e0334c9caff825b72abf0936.mp4" },
+            { name: "05. 我可以创造 (分段3)", url: "https://online-education.codemao.cn/228/codecamp/be2706ca2fc244e1b349799a4ab2a904.mp4" },
+            { name: "06. 我可以创造 (分段4)", url: "https://online-education.codemao.cn/228/codecamp/dc44e89f1ea342e49bcd9288efd9f84d.mp4" },
+            { name: "07. 我可以创造 (分段5)", url: "https://online-education.codemao.cn/228/codecamp/8151677951264357a3da0cb2872d5094.mp4" },
+            { name: "08. 我可以创造 (分段6)", url: "https://online-education.codemao.cn/228/codecamp/caadcbea38834759a0e9a2eda53beb3a.mp4" },
+            { name: "09. 我可以创造 (分段7)", url: "https://online-education.codemao.cn/228/codecamp/ddaa5c412af3462ca50a1c5a57a229b2.mp4" },
+            { name: "10. 我可以创造 (分段8)", url: "https://online-education.codemao.cn/228/codecamp/62fab66bbef246158752b195fbac0340.mp4" },
+            { name: "11. 我可以创造 (分段9)", url: "https://online-education.codemao.cn/228/codecamp/d50a0a5be87f4842bd56816826b7aab1.mp4" },
+            { name: "12. 我可以创造 (分段10)", url: "https://online-education.codemao.cn/228/codecamp/30df4f0a12794ca6a1620f2e9c8c55de.mp4" },
+            { name: "13. 我有新发现 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/2015db270be744758825d1810c09c3dc.mp4" },
+            { name: "14. 我有新发现 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/bdade2983d2b4c1583734e9a02151cce.mp4" },
+            { name: "15. 我的小总结", url: "https://online-education.codemao.cn/228/codecamp/182fef7186a94051918e6baadaedee8b.mp4" },
+            { name: "16. 总结回顾 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/b5ddaa56eb4c4f50ab9a76b94a5c47b9.mp4" },
+            { name: "17. 总结回顾 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/bb182cc8777f43c3bdf57a2e0ef32926.mp4" },
+            { name: "18. 总结回顾 (分段3)", url: "https://online-education.codemao.cn/228/codecamp/2a6fba0912f14b92afe29ed94b180402.mp4" },
+            { name: "19. 总结回顾 (分段4)", url: "https://online-education.codemao.cn/228/codecamp/d01e79a94802442394dc639dfd023ffd.mp4" },
+            { name: "20. 拓展练习", url: "https://online-education.codemao.cn/228/codecamp/f217c4b4e1c840bab002c770682e39bb.mp4" }
+        ];
+
+        let currentIndex = 0;
+
+        // 初始化播放器 (保持默认不自动播放，手动点击触发)
+        const dp = new DPlayer({
+            container: document.getElementById('dplayer'),
+            video: {
+                url: videoList[currentIndex].url,
+                type: 'normal'
+            },
+            autoplay: false,
+            hotkey: true,
+            screenshot: true
+        });
+
+        // 渲染右侧选集列表
+        const playlistContainer = document.getElementById('playlist');
+        videoList.forEach((video, index) => {
+            const item = document.createElement('div');
+            item.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
+            item.innerText = video.name;
+            item.title = video.name;
+            
+            item.addEventListener('click', () => {
+                switchVideo(index);
+            });
+            playlistContainer.appendChild(item);
+        });
+
+        // 切换视频函数
+        function switchVideo(index) {
+            currentIndex = index;
+            
+            // 更新列表的高亮状态
+            const items = document.querySelectorAll('.playlist-item');
+            items.forEach((item, i) => {
+                if (i === index) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+
+            // 切换播放器源并播放
+            dp.switchVideo({
+                url: videoList[index].url,
+                type: 'normal'
+            });
+            dp.play();
+        }
+
+        // 自动播放下一集
+        dp.on('ended', () => {
+            if (currentIndex < videoList.length - 1) {
+                switchVideo(currentIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>
