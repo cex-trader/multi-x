@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乐高机器人智能课 - 课程索引</title>
+    <style>
+        :root {
+            --bg-color: #141414;
+            --card-bg: #1f1f1f;
+            --accent-color: #00adb5;
+            --accent-hover: #00fff5;
+            --text-color: #eee;
+            --text-muted: #888;
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(45deg, #00adb5, #00fff5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p.subtitle {
+            color: var(--text-muted);
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            width: 100%;
+            max-width: 1000px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid #2d2d2d;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color);
+            box-shadow: 0 8px 30px rgba(0, 173, 181, 0.2);
+        }
+        .card:hover::before {
+            background-color: var(--accent-hover);
+            width: 6px;
+        }
+        .class-num {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .class-title {
+            font-size: 1.4rem;
+            margin: 0 0 12px 0;
+            font-weight: 600;
+        }
+        .class-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+        footer {
+            margin-top: auto;
+            padding-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        @media (max-width: 600px) {
+            body { padding: 20px 15px; }
+            h1 { font-size: 2rem; }
+            .grid-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🤖 乐高机器人智能课</h1>
+        <p class="subtitle">全套课程原厂视频在线点播与交互索引</p>
+    </header>
+
+    <div class="grid-container">
+        <a href="class0.html" class="card">
+            <div class="class-num">Lesson 00</div>
+            <div class="class-title">神奇的伸缩装置</div>
+            <div class="class-desc">探索机械结构中的连杆与伸缩原理，包含预习、创造、新发现等 15 个精彩视频切片。</div>
+        </a>
+
+        <a href="class1.html" class="card">
+            <div class="class-num">Lesson 01</div>
+            <div class="class-title">风暴陀螺大战</div>
+            <div class="class-desc">感受齿轮传动与速度比的魅力，全景还原多分支互动探索，共包含 21 个视频片段。</div>
+        </a>
+
+        <a href="class2.html" class="card">
+            <div class="class-num">Lesson 02</div>
+            <div class="class-title">第 02 课（待上传）</div>
+            <div class="class-desc">点击可进入该课时播放列表。请确保 class2.html 已经生成并上传至同级目录。</div>
+        </a>
+
+        <a href="class3.html" class="card">
+            <div class="class-num">Lesson 03</div>
+            <div class="class-title">第 03 课（待上传）</div>
+            <div class="class-desc">点击可进入该课时播放列表。请确保 class3.html 已经生成并上传至同级目录。</div>
+        </a>
+    </div>
+
+    <footer>
+        <p>© 2026 课程私有云盘 🗂️ 基于 GitHub Pages 部署</p>
+    </footer>
+
+</body>
+</html>
