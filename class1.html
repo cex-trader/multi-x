@@ -18,4 +18,101 @@
         h1 { font-size: 22px; margin-bottom: 20px; text-align: center; }
         @media (max-width: 768px) { .main-container { flex-direction: column; } .playlist-wrapper { max-height: 300px; } }
     </style>
-</head
+</head>
+<body>
+
+    <h1>🎬 《风暴陀螺大战》 课程在线点播</h1>
+
+    <div class="main-container">
+        <div class="player-wrapper">
+            <div id="dplayer"></div>
+        </div>
+        
+        <div class="playlist-wrapper">
+            <h2>课程选集</h2>
+            <div id="playlist"></div>
+        </div>
+    </div>
+
+    <script>
+        // 从 JSON 中精准提取并整理的 12 个 MP4 视频片段数据源
+        const videoList = [
+            { name: "01. 课前预习", url: "https://online-education.codemao.cn/228/codecamp/4aa198f04a504c3ab0cfcf41294ea66d.mp4" },
+            { name: "02. 我有个问题", url: "https://online-education.codemao.cn/228/codecamp/14eabd9ab43c4000a8fa297be38cd09a.mp4" },
+            { name: "03. 我可以创造 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/f509ca715c3c4ee6b4287372bf96ddf4.mp4" },
+            { name: "04. 我可以创造 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/cc386cd82a83479fb462e744ba042734.mp4" },
+            { name: "05. 我可以创造 (分段3)", url: "https://online-education.codemao.cn/228/codecamp/5280027a589d48508008f1069ec5b73d.mp4" },
+            { name: "06. 我可以创造 (分段4)", url: "https://online-education.codemao.cn/228/codecamp/eeaa04d90b9a4e43b66ff63637efff3e.mp4" },
+            { name: "07. 我可以创造 (分段5)", url: "https://online-education.codemao.cn/228/codecamp/92b7b1ae1a0145f38c868aa197018b44.mp4" },
+            { name: "08. 我可以创造 (分段6)", url: "https://online-education.codemao.cn/228/codecamp/c54632a85c634dcda7e4dda527fff7ab.mp4" },
+            { name: "09. 我有新发现 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/d325bb3c59674bb89ca00df5e8b5fdb8.mp4" },
+            { name: "10. 我有新发现 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/646e9222daee4e98a04a62e0b14f70de.mp4" },
+            { name: "11. 我有新发现 (分段3)", url: "https://online-education.codemao.cn/228/codecamp/0f7387c6099749fb92165d6db55c0a4c.mp4" },
+            { name: "12. 我有新发现 (分段4)", url: "https://online-education.codemao.cn/228/codecamp/d0151fa169c5485fb5ef41856b591df1.mp4" },
+            { name: "13. 我有新发现 (分段5)", url: "https://online-education.codemao.cn/228/codecamp/d0c405ba526c437288a5ab44b7b66049.mp4" },
+            { name: "14. 我的小总结", url: "https://online-education.codemao.cn/228/codecamp/472189f4da944d27a6e8dc242307b8eb.mp4" },
+            { name: "15. 总结回顾 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/2a7f354426b444c4aca596c884714ed1.mp4" },
+            { name: "16. 总结回顾 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/4443e1b60cb84fd1b69189a3ac110c68.mp4" },
+            { name: "17. 总结回顾 (分段3)", url: "https://online-education.codemao.cn/228/codecamp/6519df2faa1141b585186d53644ddc31.mp4" },
+            { name: "18. 总结回顾 (分段4)", url: "https://online-education.codemao.cn/228/codecamp/e0f445e9db72424eb44aa0e38fdc9808.mp4" },
+            { name: "19. 总结回顾 (分段5)", url: "https://online-education.codemao.cn/228/codecamp/21b1db3f0d4b425b99ee47ef44262d8f.mp4" },
+            { name: "20. 拓展练习 (分段1)", url: "https://online-education.codemao.cn/228/codecamp/144115ca463247eba756a419c38b19bf.mp4" },
+            { name: "21. 拓展练习 (分段2)", url: "https://online-education.codemao.cn/228/codecamp/13a7f1f7bd2146d1b2928af920ffec57.mp4" }
+        ];
+
+        let currentIndex = 0;
+
+        // 初始化播放器
+        const dp = new DPlayer({
+            container: document.getElementById('dplayer'),
+            video: {
+                url: videoList[currentIndex].url,
+                type: 'normal'
+            },
+            autoplay: false,
+            hotkey: true,
+            screenshot: true
+        });
+
+        // 渲染右侧选集列表
+        const playlistContainer = document.getElementById('playlist');
+        videoList.forEach((video, index) => {
+            const item = document.createElement('div');
+            item.className = `playlist-item ${index === currentIndex ? 'active' : ''}`;
+            item.innerText = video.name;
+            item.title = video.name;
+            
+            item.addEventListener('click', () => {
+                switchVideo(index);
+            });
+            playlistContainer.appendChild(item);
+        });
+
+        // 切换视频函数
+        function switchVideo(index) {
+            currentIndex = index;
+            
+            // 更新列表的高亮状态
+            const items = document.querySelectorAll('.playlist-item');
+            items.forEach((item, i) => {
+                if (i === index) item.classList.add('active');
+                else item.classList.remove('active');
+            });
+
+            // 切换播放器源并播放
+            dp.switchVideo({
+                url: videoList[index].url,
+                type: 'normal'
+            });
+            dp.play();
+        }
+
+        // 自动播放下一集
+        dp.on('ended', () => {
+            if (currentIndex < videoList.length - 1) {
+                switchVideo(currentIndex + 1);
+            }
+        });
+    </script>
+</body>
+</html>
